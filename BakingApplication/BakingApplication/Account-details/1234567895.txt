@@ -1,0 +1,4 @@
+Account No: 1234567895
+Total-Balance: 0.00
+Account Type: SavingsAccount
+Required Balance: 2000
