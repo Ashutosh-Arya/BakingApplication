@@ -1,4 +1,5 @@
 ﻿using BakingApplication;
+using System.Reflection.Metadata.Ecma335;
 
 
 Address address = new Address(addressId: 1, city: "New Delhi", state: "Delhi", addressLine: "Kohat Enclave", country: "India", pinCode: "100088");
@@ -15,24 +16,39 @@ Bank sbibank = new Bank(ifscCode: "SBIN0000045", bankName: "SBI", address: addre
 
 contacts[0] = new Contact(phoneNo: "9875461203", contactId: 1, email: "ICICI@ICICI.com");
 Bank icicibank = new Bank(ifscCode: "ICIC0000045", bankName: "ICICI", address: address, contactDetails: contacts);
-    
+
 
 
 Console.WriteLine("Dear User Do you have Account?\nEnter your choice Yes = 1 or No = 2");
 int choice = Convert.ToInt32(Console.ReadLine().Trim());
 
-if (choice == 1 ){
+if (choice == 1)
+{
     Console.WriteLine("Enter your Account number");
     int accountnumber = Convert.ToInt32(Console.ReadLine().Trim());
-    Commons.checkAccount(accountnumber);
+    Account.checkAccount(accountnumber);
 
-    Console.WriteLine("want to deposit money");
-    int money = Convert.ToInt32(Console.ReadLine().Trim());
-    Account a = new Account();
-    a.depositmoney(accountnumber, money);
+    Console.WriteLine("want  to deposit money");
+    Console.WriteLine("Enter your choice \n 1 to deopsit \n 2 to exit");
+    int choice1 = Convert.ToInt32(Console.ReadLine().Trim());
+
+   
+    if(choice1 == 1)
+    {
+        Console.WriteLine("enter amount to deposit");
+        decimal money = Convert.ToInt32(Console.ReadLine().Trim());
+        Account.DepositMoney(accountnumber, money);
+    }
+    else
+    {
+        Console.WriteLine("Exiting");
+    }
+
+   
+   
 }
-else if (choice==2) { CreateAccount(); }
-else  { Console.WriteLine("invalid input"); }
+else if (choice == 2) { CreateAccount(); }
+else { Console.WriteLine("invalid input"); }
 
 void CreateAccount()
 {
@@ -70,29 +86,29 @@ void CreateAccount()
     Contact contact = new Contact(1, phonenumber, email);
 
     Customer customer1 = new Customer(customerId: 1, firstName: FirstName, lastName: LastName, tempAddress: address1, permanentAddress: address1, primaryContactDetails: contact, secondaryContactDetails: contact);
-    Console.WriteLine((customer1!=null)? "Profile Created" :" not created");
+    Console.WriteLine((customer1 != null) ? "Profile Created" : " not created");
     Console.WriteLine("Which bank account you want to create \n1. SBI \n2. ICICI \n3. Central Bank \n4. HDFC ");
     int bankChoice = Convert.ToInt32(Console.ReadLine().Trim());
     Account account = new SavingsAccount();
     if (bankChoice == 1)
     {
-        account= new SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: sbibank);
+        account = new SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: sbibank);
         Console.WriteLine(account.ToString());
 
     }
     else if (bankChoice == 2)
     {
-        account = new   SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: icicibank);
+        account = new SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: icicibank);
         Console.WriteLine(account.ToString());
     }
     else if (bankChoice == 3)
     {
-         account = new SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: centalbank);
+        account = new SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: centalbank);
         Console.WriteLine(account.ToString());
     }
     else if (bankChoice == 4)
     {
-         account = new SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: hdfcbank);
+        account = new SavingsAccount(accountNo: "1234567895", totalBalance: 0.00M, withdrawalLimit: 50000, depositLimit: 200000, customer: customer1, requiredBalance: 2000, bankBranch: hdfcbank);
         Console.WriteLine(account.ToString());
     }
     else
@@ -100,10 +116,10 @@ void CreateAccount()
         Console.WriteLine("Enter valid Choice");
     }
     account.filestorage();
- 
+
 }
 void Getdetails()
 {
-    Console.WriteLine("Enter account number :"); 
+    Console.WriteLine("Enter account number :");
     string userAccount = Console.ReadLine().Trim();
 }

@@ -63,7 +63,7 @@ namespace BakingApplication
         public decimal TotalBalance
         {
             get { return totalBalance; }
-            set 
+            set
             {
                 if (value >= 0.0M)
                 {
@@ -71,7 +71,7 @@ namespace BakingApplication
                 }
                 else
                 {
-                    Console.WriteLine("Invalid account balance "+ value);
+                    Console.WriteLine("Invalid account balance " + value);
                     totalBalance = 0.0M;
                 }
             }
@@ -81,10 +81,10 @@ namespace BakingApplication
             get
             { return withdrawalLimit; }
             set { withdrawalLimit = value; }
-          
+
         }
 
-        
+
         public decimal DepositLimit
         {
             get { return depositLimit; }
@@ -108,21 +108,21 @@ namespace BakingApplication
         public decimal RequiredBalance
         {
             get { return requiredBalance; }
-            set {  requiredBalance = value; }
+            set { requiredBalance = value; }
         }
         public Bank BankBranch
         {
             get { return bankBranch; }
             set { bankBranch = value; }
         }
-
+        public string acccountdetails = "";
         public override string ToString()
         {
-            return  "Account No: " + AccountNo +
+            return acccountdetails = "Account No: " + AccountNo +
                    "\nTotal Balance: " + TotalBalance +
                    "\nAccount Type: " + AccountType +
                    "\nCustomer Details: " + Customer.ToString() +
-                   "\nBank: " + BankBranch.ToString() +
+                   "\nBank: " + BankBranch.IFSCCode.ToString() +
                    "\nRequired Balance: " + RequiredBalance;
         }
 
@@ -134,20 +134,18 @@ namespace BakingApplication
             {
                 Console.WriteLine("Account Already Exists");
             }
-            else {
+            else
+            {
                 using (StreamWriter writer = new StreamWriter(accountFile))
                 {
-                    writer.WriteLine("Account No: " + AccountNo +
-                   "\nTotal-Balance: " + TotalBalance +
-                   "\nAccount Type: " + AccountType +
-                   "\nRequired Balance: " + RequiredBalance);
-                    
+                    writer.WriteLine(this.ToString());
+
                 }
-               
+
             }
         }
 
-        public void depositmoney(int a,int money)
+        public void depositmoney(int a, int money)
         {
             string rootFolder = @"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\";
             string accountFile = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{a}.txt";
@@ -168,6 +166,131 @@ namespace BakingApplication
             }
         }
 
-     
+        public static void checkAccount(int a)
+        {
+            string rootFolder = @"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\";
+            string accountFile = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{a}.txt";
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+
+            if (File.Exists(accountFile))
+            {
+                try
+                {
+                    foreach (var line in File.ReadLines(accountFile))
+                    {
+                        // Skip empty lines
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        // Split the line into key and value based on ':'
+                        var parts = line.Split(new[] { ':' }, 2);
+
+                        // Ensure we have exactly two parts
+                        if (parts.Length == 2)
+                        {
+                            string key = parts[0].Trim();
+                            string value = parts[1].Trim();
+
+                            // Add to the dictionary
+                            keyValuePairs[key] = value;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Ignoring malformed line: {line}");
+                        }
+                    }
+
+                    // Output the key-value pairs
+                    if (keyValuePairs.TryGetValue("Total Balance", out string totalBalanceValue))
+                    {
+                        Console.WriteLine($"Total Balance = {totalBalanceValue}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Key 'Total Balance' not found.");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading file: {ex.Message}");
+                }
+            }
+        }
+        public static void DepositMoney(int account, decimal money)
+        {
+            string rootFolder = @"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\";
+            string accountFile = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{account}.txt";
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            if (File.Exists(accountFile))
+            {
+                try
+                {
+                    foreach (var line in File.ReadLines(accountFile))
+                    {
+                        // Skip empty lines
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        // Split the line into key and value based on ':'
+                        var parts = line.Split(new[] { ':' }, 2);
+
+                        // Ensure we have exactly two parts
+                        if (parts.Length == 2)
+                        {
+                            string key = parts[0].Trim();
+                            string value = parts[1].Trim();
+
+                            // Add to the dictionary
+                            keyValuePairs[key] = value;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Ignoring malformed line: {line}");
+                        }
+                    }
+
+                    
+                    if (keyValuePairs.ContainsKey("Total Balance"))
+                    {
+                        if (decimal.TryParse(keyValuePairs["Total Balance"], out decimal currentValue))
+                        {
+                            decimal updatedValue = currentValue + money;
+                            keyValuePairs["Total Balance"] = updatedValue.ToString();
+                            Console.WriteLine($"Total Balance updated.{updatedValue}" );
+                        }
+                        else
+                        {
+                            Console.WriteLine("The current value of 'Total Balance' is not a valid decimal.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Key 'Total Balance' not found. Adding new key.");
+                        keyValuePairs["Total Balance"] = money.ToString(); // Add the key with the initial value
+                    }
+
+
+                    // Save the updated dictionary back to the file
+                    using (StreamWriter writer = new StreamWriter(accountFile))
+                    {
+                        foreach (var kvp in keyValuePairs)
+                        {
+                            writer.WriteLine($"{kvp.Key}:{kvp.Value}");
+                        }
+                    }
+
+                    Console.WriteLine("File updated successfully.");
+                
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading file: {ex.Message}");
+                }
+            }
+
+        }
+
     }
 }

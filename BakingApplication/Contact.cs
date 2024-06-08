@@ -79,7 +79,7 @@ namespace BakingApplication
 
         public override string ToString()
         {
-            return ContactId + ", " + PhoneNo + ", " + Email;
+            return  ":" + PhoneNo + ", " + Email;
         }
     }
 }

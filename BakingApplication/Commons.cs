@@ -79,20 +79,7 @@ namespace BakingApplication
                 return true;
             }
         }
-        public static void checkAccount(int accountNo)
-        {
-            string rootFolder = @"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\";
-            string accountFile = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{accountNo}.txt";
-            if (File.Exists(accountFile))
-            {
-                string text = File.ReadAllText(accountFile);
-                Console.WriteLine(text);
-            }
-            else
-            {
-                Console.WriteLine($"Account does not exist with {accountNo}");
-            }
-        }
+      
 
     }
 }
