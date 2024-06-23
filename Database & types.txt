@@ -1,0 +1,34 @@
+
+
+Database:
+	A database is an organized collection of structured information, or data, typically stored electronically in a computer system.
+	
+	Types of databases:
+		- Relational databases
+			- way of structuring information in tables, rows, and columns. An RDB has the ability to establish links—or relationships–between information by joining tables, 
+			which makes it easy to understand and gain insights about the relationship between various data points.
+			- used by organizations that need to manage large amounts of structured data, from tracking inventory to processing transactional data to application logging.  
+		- Object-oriented databases
+			- supports the modelling and creation of data as objects
+			- An object-oriented database system must meet two requirements: it must be a database management system (DBMS) and it must be an object-oriented system, meaning that it must, to the greatest degree feasible.
+			
+		- Distributed databases
+			- distributed database is a database that stores data in multiple locations instead of one location. This means that rather than putting all data on one server or on one computer,
+			  data is placed on multiple servers or in a cluster of computers consisting of individual nodes. These nodes are oftentimes geographically separate and may be physical computers or
+			  virtual machines within a cloud database.
+
+		- NoSQL databases
+			-  NoSQL databases, data can be stored without defining the schema upfront—which means you have the ability to get moving and iterate quickly, defining the data model as you go.
+				This can be suitable for specific business requirements, whether it’s graph-based, column-oriented, document-oriented, or as a key-value store.
+		- Graph databases
+			- A graph database is a systematic collection of data that emphasizes the relationships between the different data entities. The NoSQL database uses mathematical graph theory to show data connections.
+			  these databases often provide better performance and flexibility as they are more suited for modelling real-world scenarios.
+		- Cloud databases
+			- A cloud database is a database that is built, deployed, and accessed in a cloud environment, such as a private, public, or hybrid cloud.
+		
+		- Self-driving databases
+			- An autonomous database is a cloud database that uses machine learning to automate database tuning, security, backups, updates, and other routine management tasks traditionally performed by DBAs. 
+			  autonomous database performs all these tasks and more without human intervention.
+			  
+		- Network Database
+			-  represent data in a tree-like structure. 
