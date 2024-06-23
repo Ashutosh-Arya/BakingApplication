@@ -39,20 +39,31 @@ namespace BakingApplication
             BankBranch = bankBranch;
         }
 
-        public virtual string AccountNo
+        public string AccountNo
         {
             get { return accountNo; }
             set
             {
-                if (Commons.CheckEmpty(value) && Commons.GetRegex(@"^[0-9]{10}$").IsMatch(value))
+                try
                 {
-                    this.accountNo = value;
+                    if (Commons.CheckEmpty(value) /*&& Commons.GetRegex(@"^[0-9]{10}$").IsMatch(value)*/)
+                    {
+                        this.accountNo = value;
+                    }
+                    else
+                    {
+
+                        accountNo = String.Empty;
+                        throw new Exception($"{this.accountNo} Account number not valid");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Account number is not valid.");
-                    accountNo = String.Empty;
+
+                    Console.WriteLine(ex.Message);
+                    throw;
                 }
+
             }
         }
         public Commons.AccountType AccountType
@@ -141,7 +152,8 @@ namespace BakingApplication
                     writer.WriteLine(this.ToString());
 
                 }
-
+                string passbook = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{AccountNo}passbook.txt";
+                StreamWriter writer1 = new StreamWriter(passbook);
             }
         }
 
@@ -221,6 +233,7 @@ namespace BakingApplication
         {
             string rootFolder = @"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\";
             string accountFile = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{account}.txt";
+            string passbook = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{account}passbook.txt";
 
             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
             if (File.Exists(accountFile))
@@ -250,14 +263,25 @@ namespace BakingApplication
                         }
                     }
 
-                    
+
                     if (keyValuePairs.ContainsKey("Total Balance"))
                     {
                         if (decimal.TryParse(keyValuePairs["Total Balance"], out decimal currentValue))
                         {
                             decimal updatedValue = currentValue + money;
                             keyValuePairs["Total Balance"] = updatedValue.ToString();
-                            Console.WriteLine($"Total Balance updated.{updatedValue}" );
+                            Console.WriteLine($"Total Balance updated.{updatedValue}");
+
+                            try
+                            {
+                                string line = "Deposit money on" + System.DateTime.Now + "="+ money;
+                                File.AppendAllText(passbook, line + Environment.NewLine);
+                               
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error appending to file: {ex.Message}");
+                            }
                         }
                         else
                         {
@@ -281,7 +305,7 @@ namespace BakingApplication
                     }
 
                     Console.WriteLine("File updated successfully.");
-                
+
 
                 }
                 catch (Exception ex)
@@ -292,5 +316,133 @@ namespace BakingApplication
 
         }
 
-    }
+        public static void WithdrawMoney(int account, decimal money)
+        {
+            string rootFolder = @"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\";
+            string accountFile = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{account}.txt";
+            string passbook = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{account}passbook.txt";
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            
+
+           
+            
+            if (File.Exists(accountFile))
+            {
+                try
+                {
+                    foreach (var line in File.ReadLines(accountFile))
+                    {
+                        // Skip empty lines
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        // Split the line into key and value based on ':'
+                        var parts = line.Split(new[] { ':' }, 2);
+
+                        // Ensure we have exactly two parts
+                        if (parts.Length == 2)
+                        {
+                            string key = parts[0].Trim();
+                            string value = parts[1].Trim();
+
+                            // Add to the dictionary
+                            keyValuePairs[key] = value;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Ignoring malformed line: {line}");
+                        }
+                    }
+
+
+                    if (keyValuePairs.ContainsKey("Total Balance"))
+                    {
+                        if (decimal.TryParse(keyValuePairs["Total Balance"], out decimal currentValue))
+                        {
+
+                            if (money >= 0.0M && money <= currentValue)
+                            {
+                                decimal updatedValue = currentValue - money;
+
+
+                                keyValuePairs["Total Balance"] = updatedValue.ToString();
+                                Console.WriteLine($"Total Balance updated. Currnt Money ={updatedValue}");
+                                try
+                                {
+                                    string line = "Withdraw money on" + System.DateTime.Now + "=" + money;
+                                    File.AppendAllText(passbook, line + Environment.NewLine);
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Error appending to file: {ex.Message}");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid account balance "); 
+                            }
+
+                           
+                        }
+                        else
+                        {
+                            Console.WriteLine("The current value of 'Total Balance' is not a valid decimal.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Key 'Total Balance' not found. Adding new key.");
+                        keyValuePairs["Total Balance"] = money.ToString(); // Add the key with the initial value
+                    }
+
+
+                    // Save the updated dictionary back to the file
+                    using (StreamWriter writer = new StreamWriter(accountFile))
+                    {
+                        foreach (var kvp in keyValuePairs)
+                        {
+                            writer.WriteLine($"{kvp.Key}:{kvp.Value}");
+                        }
+                    }
+
+                    Console.WriteLine("File updated successfully.");
+
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading file: {ex.Message}");
+                }
+            }
+
+        }
+
+        public static void Passbook(int account)
+        {
+            string passbook = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{account}passbook.txt";
+            if (File.Exists(passbook))
+            {
+                try
+                {
+                    foreach (var line in File.ReadLines(passbook))
+                    {
+                        Console.WriteLine(line);
+                        
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading file: {ex.Message}");
+                }
+            }
+           
+            else
+            {
+                Console.WriteLine($"Passbook file for account {account} does not exist.");
+            }
+            checkAccount(account);
+        }
+
+    
+    } 
 }

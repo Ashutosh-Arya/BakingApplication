@@ -30,7 +30,7 @@ namespace BakingApplication
             WithdrawalLimit = withdrawalLimit;
         }
 
-        public override string AccountNo
+        public  string AccountNo
         {
             get
             {

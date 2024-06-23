@@ -30,7 +30,7 @@ namespace BakingApplication
             WithdrawalLimit = withdrawalLimit;
         }
 
-        public override string AccountNo {
+        public  string AccountNo {
             get
             {
                 return  base.AccountNo;
@@ -41,7 +41,8 @@ namespace BakingApplication
                 base.AccountNo = value;
                 }
                 else {
-                    Console.WriteLine("Account No- not valid");
+                    
+                    Console.WriteLine($"{base.AccountNo} Account number-- not valid");
                     base.AccountNo = String.Empty ;
                 }
             }

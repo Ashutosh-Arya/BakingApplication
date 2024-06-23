@@ -1,0 +1,12 @@
+Account No:2024060001
+Total Balance:2.00
+Account Type:SavingsAccount
+Customer Details:Account No: 1
+FirstName:arya
+LastName:ashu
+Bank:IFSC Code: SBIN0000045
+Bank Name:SBI
+Address:Kohat Enclave, Delhi, New Delhi, India,100088
+Contact Details:
+:9875461203, ICICI@ICICI.com,
+Required Balance:2000

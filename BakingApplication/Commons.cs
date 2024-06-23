@@ -28,7 +28,7 @@ namespace BakingApplication
 
         public static bool CheckEmpty(string input)
         {
-            if (input == null || input == String.Empty)
+            if (input == null /*|| input == String.Empty*/)
             {
                 return false;
             }
@@ -79,7 +79,26 @@ namespace BakingApplication
                 return true;
             }
         }
-      
+
+       public static string Account_number()
+        {
+            int inc = 1;
+            string account_no;
+            string accountFile;
+
+            do
+            {
+                account_no = System.DateTime.Now.Year
+                             + System.DateTime.Now.Month.ToString().PadLeft(2, '0')
+                             + inc.ToString().PadLeft(4, '0');
+                accountFile = $@"C:\Users\ashut\source\repos\BakingApplication\BakingApplication\Account-details\{account_no}.txt";
+                inc++;
+            }
+            while (File.Exists(accountFile));
+
+            return account_no;
+        }
+
 
     }
 }
